@@ -40,3 +40,5 @@ For example:
 What is the solution to your new captcha?
 
 Your puzzle answer was 1244.
+
+Both parts of this puzzle are complete! They provide two gold stars: **

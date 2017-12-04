@@ -43,3 +43,5 @@ In this example, the sum of the results would be 4 + 3 + 2 = 9.
 What is the sum of each row's result in your puzzle input?
 
 Your puzzle answer was 267.
+
+Both parts of this puzzle are complete! They provide two gold stars: **

@@ -36,6 +36,8 @@ def Adj(t):
                 return t-1
             else:
                 return int (Adj(t+1)-1)
+        elif (pos == side-1 ):
+            return t-1
         else:
             side_below = (S(x-1) - S(x-2)) / 4
             return int( n_side * side_below + pos + S(x-2) )
@@ -63,7 +65,11 @@ def P(t):
             aux = (2*x-1)**2
             print ("P(", t, ") = ", P(t-1), "+", P( aux ), "+", P( aux+1 ) )
             p += P(aux) + P(aux+1)
-        elif (pos_in_side == side-1 or pos_in_layer == 0):    # Corner or first of the layer
+        elif (pos_in_layer == S(x)-S(x-1)-2):               # The element before the last of the layer (must be treated as somewhere else but would enter in 'about to turn')
+            adj = Adj(t)
+            print ("P(", t, ") = ", P(t-1), "+", P(adj), "+", P(adj+1), "+", P( Adj(t-1) ) )
+            p += P(adj) + P(adj+1) + P( Adj(t-1))
+        elif (pos_in_side == side-1 or pos_in_layer == 0):  # Corner or first of the layer
             print ("P(", t, ") = ", P(t-1), "+", P( Adj(t+1)) )
             p += P( Adj(t+1) )
         elif (pos_in_side == side-2):                       # About to turn

@@ -43,3 +43,7 @@ Once a square is written, its value does not change. Therefore, the first few sq
 362  747  806--->   ...
 
 What is the first value written that is larger than your puzzle input?
+
+Your puzzle answer was 266330.
+
+Both parts of this puzzle are complete! They provide two gold stars: **

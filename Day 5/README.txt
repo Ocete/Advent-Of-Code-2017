@@ -1,43 +1,33 @@
---- Day 4: High-Entropy Passphrases ---
+--- Day 5: A Maze of Twisty Trampolines, All Alike ---
 
-A new system policy has been put in place that requires all accounts to use a passphrase instead of simply a password. A passphrase consists of a series of words (lowercase letters) separated by spaces.
+An urgent interrupt arrives from the CPU: it's trapped in a maze of jump instructions, and it would like assistance from any programs with spare cycles to help find the exit.
 
-To ensure security, a valid passphrase must contain no duplicate words.
+The message includes a list of the offsets for each jump. Jumps are relative: -1 moves to the previous instruction, and 2 skips the next one. Start at the first instruction in the list. The goal is to follow the jumps until one leads outside the list.
 
-For example:
+In addition, these instructions are a little strange; after each jump, the offset of that instruction increases by 1. So, if you come across an offset of 3, you would move three instructions forward, but change it to a 4 for the next time it is encountered.
 
-    aa bb cc dd ee is valid.
-    aa bb cc dd aa is not valid - the word aa appears more than once.
-    aa bb cc dd aaa is valid - aa and aaa count as different words.
+For example, consider the following list of jump offsets:
 
-The system's full passphrase list is available as your puzzle input. How many passphrases are valid?
+0
+3
+0
+1
+-3
 
-Your puzzle answer was 325.
+Positive jumps ("forward") move downward; negative jumps move upward. For legibility in this example, these offset values will be written all on one line, with the current instruction marked in parentheses. The following steps would be taken before an exit is found:
 
-The first half of this puzzle is complete! It provides one gold star: *
+    (0) 3  0  1  -3  - before we have taken any steps.
+    (1) 3  0  1  -3  - jump with offset 0 (that is, don't jump at all). Fortunately, the instruction is then incremented to 1.
+     2 (3) 0  1  -3  - step forward because of the instruction we just modified. The first instruction is incremented again, now to 2.
+     2  4  0  1 (-3) - jump all the way to the end; leave a 4 behind.
+     2 (4) 0  1  -2  - go back to where we just were; increment -3 to -2.
+     2  5  0  1  -2  - jump 4 steps forward, escaping the maze.
 
---- Part Two ---
+In this example, the exit is reached in 5 steps.
 
-For added security, yet another system policy has been put in place. Now, a valid passphrase must contain no two words that are anagrams of each other - that is, a passphrase is invalid if any word's letters can be rearranged to form any other word in the passphrase.
-
-For example:
-
-    abcde fghij is a valid passphrase.
-    abcde xyz ecdab is not valid - the letters from the third word can be rearranged to form the first word.
-    a ab abc abd abf abj is a valid passphrase, because all letters need to be used when forming another word.
-    iiii oiii ooii oooi oooo is valid.
-    oiii ioii iioi iiio is not valid - any of these words can be rearranged to form any other word.
-
-Under this new system policy, how many passphrases are valid?
-
-Your puzzle answer was 119.
-
-Both parts of this puzzle are complete! They provide two gold stars: **
+How many steps does it take to reach the exit?
 
 Your puzzle answer was 325922.
-
-The first half of this puzzle is complete! It provides one gold star: *
-
 --- Part Two ---
 
 Now, the jumps are even stranger: after each jump, if the offset was three or more, instead decrease it by 1. Otherwise, increase it by 1 as before.

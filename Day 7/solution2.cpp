@@ -72,7 +72,7 @@ string Root(const map<string, vector<string> > & circus) {
   return "ERROR";
 }
 
-void BuildTree(Tree * tree, const map<string, vector<string> > & circus, const string & node) {
+void BuildTree(Tree * &tree, map<string, vector<string> > & circus, string node) {
   tree = new Tree;
   vector<string> data = circus[node];
   tree->weight = atoi( ( data[0].substr(1, data[0].length()-1) ).c_str() );
@@ -83,13 +83,66 @@ void BuildTree(Tree * tree, const map<string, vector<string> > & circus, const s
   }
 }
 
-string UnbalancedWeight() {
+int WeightBranch(Tree * tree) {
+  int result = tree->weight;
+  for (int i=0; i<tree->children.size(); i++) {
+    result += WeightBranch(tree->children[i]);
+  }
+  return result;
+}
+
+int Rebalance(Tree * tree, int & difference) {
+  int i=1, j;
+  vector<int> weights;
+  for (int i=0; i<tree->children.size(); i++) {
+    weights.push_back( WeightBranch(tree->children[i]) );
+  }
+  bool found = false;
+  while ( !found && i<weights.size() ) {
+    if (weights[0] != weights[i]) {
+      found = true;
+      if (difference == 0) {
+        j = i == 1 ? 2 : i-1;
+        if (weights[0] != weights[j]) {
+          i = 0;
+        }
+        // From this point, i points to the unbalanced weight and j to a balanced one
+        difference = weights[j] - weights[i];
+      }
+    } else {
+     i++;
+    }
+  }
+  if (!found) {
+    return tree->weight + difference;
+  } else {
+    return Rebalance(tree->children[i], difference);
+  }
+}
+
+void DestroyTree(Tree * tree) {
+  if (tree == NULL) {
+    return;
+  }
+  for (int i=0; i<tree->children.size(); i++) {
+    DestroyTree(tree->children[i]);
+  }
+  delete tree;
+}
+
+
+int UnbalancedWeight() {
   map<string, vector<string> > circus;
   Tree * tree;
+  int result, difference = 0;
+
   ReadCircus(circus);
   string root = Root(circus);
+
   BuildTree(tree, circus, root);
-  return root;
+  result = Rebalance(tree, difference);
+  DestroyTree(tree);
+  return result;
 }
 
 int main() {

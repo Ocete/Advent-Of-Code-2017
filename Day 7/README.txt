@@ -67,3 +67,7 @@ However, for tknk to be balanced, each of the programs standing on its disc and 
 As you can see, tknk's disc is unbalanced: ugml's stack is heavier than the other two. Even though the nodes above ugml are balanced, ugml itself is too heavy: it needs to be 8 units lighter for its stack to weigh 243 and keep the towers balanced. If this change were made, its weight would be 60.
 
 Given that exactly one program is the wrong weight, what would its weight need to be to balance the entire tower?
+
+Your puzzle answer was 1458.
+
+Both parts of this puzzle are complete! They provide two gold stars: **

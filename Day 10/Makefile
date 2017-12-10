@@ -3,7 +3,7 @@ all: solution execution solution2 execution2
 execution: solution
 	./solution < input.txt
 
-solution: 
+solution:
 	g++ solution.cpp -o solution -std=c++17 -O2
 
 execution2: solution2

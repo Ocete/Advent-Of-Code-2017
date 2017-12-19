@@ -72,3 +72,7 @@ Finally, both programs try to rcv a fourth time, but no data is waiting for eith
 It should be noted that it would be equally valid for the programs to run at different speeds; for example, program 0 might have sent all three values and then stopped at the first rcv before program 1 executed even its first instruction.
 
 Once both of your programs have terminated (regardless of what caused them to do so), how many times did program 1 send a value?
+
+Your puzzle answer was 7620.
+
+Both parts of this puzzle are complete! They provide two gold stars: **

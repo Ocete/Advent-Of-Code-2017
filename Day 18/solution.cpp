@@ -31,14 +31,14 @@ void PrintCode(vector<vector<string> > & data) {
   }
 }
 
-void PrintRegisters(const vector<long long unsigned> & registers) {
-  for (int i=0; i<registers.size(); i++) {
-    cout << 'a' +  i << " -> " << registers[i] << endl;
-  }
-}
-
 int ctoi(char c) {
   return c - 'a';
+}
+
+void PrintRegisters(const vector<long long unsigned> & registers) {
+  for (char c='a'; c<='z'; c++) {
+    cout << c << " -> " << registers[ctoi(c)] << endl;
+  }
 }
 
 int RegisterToInt(vector<long long unsigned> registers, string r) {

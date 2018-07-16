@@ -3,8 +3,11 @@
 #include <set>
 #include <vector>
 #include <fstream>
-
 using namespace std;
+
+int LetterToIndex (char c) {
+  return c - 'a';
+}
 
 void PrintMap(map<int,char> m) {
   for (int i=0; i<16; i++) {
@@ -13,26 +16,25 @@ void PrintMap(map<int,char> m) {
   cout << endl;
 }
 
-void Spin (map<int,char> & dancers, int jump) {
+void Spin (map<int,char> & programs, int jump) {
   map<int, char> new_map;
-  int mod = dancers.size();
-  for (map<int,char>::iterator it = dancers.begin(); it != dancers.end(); it++) {
-    new_map.insert( pair<int,char> ( (it->first + jump) % mod, it->second) );
+  for (map<int,char>::iterator it = programs.begin(); it != programs.end(); it++) {
+    new_map.insert( pair<int,char> ( (it->first + jump) % 16, it->second) );
   }
-  dancers = new_map;
+  programs = new_map;
 }
 
-void Exchange (map<int,char> & dancers, int pos1, int pos2) {
-  char aux = dancers[pos1];
-  dancers[pos1] = dancers[pos2];
-  dancers[pos2] = aux;
+void Exchange (map<int,char> & programs, int pos1, int pos2) {
+  char aux = programs[pos1];
+  programs[pos1] = programs[pos2];
+  programs[pos2] = aux;
 }
 
-void Partner (map<int,char> & dancers, char prog1, char prog2) {
+void Partner (map<int,char> & programs, char prog1, char prog2) {
   int pos1 = -1, pos2 = -1;
   bool found = false;
-  map<int,char>::iterator it = dancers.begin();
-  while (!found && it != dancers.end()) {
+  map<int,char>::iterator it = programs.begin();
+  while (!found && it != programs.end()) {
     if (it->second == prog1) {
       pos1 = it->first;
       if (pos2 != -1)
@@ -45,85 +47,88 @@ void Partner (map<int,char> & dancers, char prog1, char prog2) {
     it++;
   }
   if (pos1 != -1 && pos2 != -1)
-    Exchange(dancers, pos1, pos2);
+    Exchange(programs, pos1, pos2);
   else
     cerr << "Programs " << prog1 << " and " << prog2 << " not found." << endl;
 }
 
-void Dance(map<int,char> & dancers) {
+void StringToMap (map<int, char> &m, const string &str) {
+  m.clear();
+  for (int i=0; i<str.size(); i++) {
+    m[i] = str[i];
+  }
+}
+
+string Dance(string &dancers) {
+  //cout << "Before core" << endl;
+
   fstream file;
-  int pos1, pos2, i_in;
-  char prog1, prog2;
-  char c_in;
+  map<int,char> programs;
+  char prog1, prog2, c_in;
+  int i_in, pos1, pos2;
+
+  StringToMap(programs, dancers);
+  //PrintMap(programs);
 
   file.open("input.txt", fstream::in);
   file >> c_in;
   while (file) {
     if (c_in == 's') {
       file >> i_in;
-      Spin(dancers, i_in);
+      Spin(programs, i_in);
     } else if (c_in == 'x') {
       file >> pos1;
       file >> c_in; // Skip the '/'
       file >> pos2;
-      Exchange(dancers, pos1, pos2);
+      Exchange(programs, pos1, pos2);
     } else {
       file >> prog1;
       file >> c_in; // Skip the '/'
       file >> prog2;
-      Partner(dancers, prog1, prog2);
+      Partner(programs, prog1, prog2);
     }
 
     file >> c_in; // Skip the ','
     file >> c_in;
   }
 
-  file.close();
-}
-
-string MapToString(map<int,char> & dancers) {
-  string result = "";
-  for (int i=0; i<dancers.size(); i++) {
-    result += dancers[i];
+  for (int i=0; i<16; i++) {
+    dancers[i] = programs[i];
   }
-  return result;
+
+
+  file.close();
+  //cout << "After core" << endl;
 }
 
 string PermutationPromenade() {
-  map<int,char> dancers;
-  char c = 'a';
+  string dancers = "abcdefghijklmnop";
   string result;
   map<string, int> configurations;
-
-  for (int i=0; i<16; i++) {
-    dancers[i] = c;
-    c++;
-  }
-  //PrintMap(dancers);
-  result = MapToString(dancers);
+  int i=0;
 
   do {
-    configurations.insert(pair<string,int> (result, configurations.size()) );
+    cout << i << " -> " << dancers << endl;
+    configurations[dancers] = i;
 
     Dance(dancers);
-    result = MapToString(dancers);
+    i++;
+  } while (configurations.count(dancers) == 0);
 
-  } while (configurations.count(result) == 0);
+  //cout << "HIT: " << dancers << endl;
 
-  // Using that the dancers repeat the same configuration afeter some iterations
-  int mod = configurations.size() + 1,
-      total_it = 1000000000 % mod + configurations[result]-1;
+  // Using that the dancers repeat the same configuration after some iterations
+  int it_before_loop = configurations[dancers];
+  int resting_iterations = 1000000000 - it_before_loop;
+  int mod = i - it_before_loop;
+  resting_iterations =  resting_iterations % mod;
 
-  c = 'a';
-  for (int i=0; i<16; i++) {
-    dancers[i] = c;
-    c++;
-  }
-
-  for (int i=0; i<total_it; i++)
+  for (int j=0; j<resting_iterations; j++)
     Dance(dancers);
 
-  return MapToString(dancers);
+  //cout << it_before_loop << " " << mod << " " << i << " " << resting_iterations << endl;
+
+  return dancers;
 }
 
 

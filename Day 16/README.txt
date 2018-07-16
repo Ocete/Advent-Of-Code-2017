@@ -37,3 +37,7 @@ In the example above, their second dance would begin with the order baedc, and u
     pe/b, swapping programs e and b: ceadb.
 
 In what order are the programs standing after their billion dances?
+
+Your puzzle answer was knmdfoijcbpghlea.
+
+Both parts of this puzzle are complete! They provide two gold stars: **
